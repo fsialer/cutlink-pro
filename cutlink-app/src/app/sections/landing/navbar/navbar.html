@@ -1,0 +1,23 @@
+<nav class="flex items-center justify-between px-6 py-4 backdrop-blur-md bg-slate-950/50 sticky top-0 z-50">
+    <div class="flex items-center space-x-2">
+        <div
+            class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+        </div>
+        <span class="text-xl font-bold tracking-tight">CutLink</span>
+    </div>
+    <div class="flex items-center space-x-4">
+        <button *ngIf="!isLoggedIn" (click)="login()"
+            class="px-5 py-2 rounded-full font-medium text-slate-300 hover:text-white transition-colors">
+            Login
+        </button>
+        <button (click)="navigateToDashboard()"
+            class="px-6 py-2 bg-white text-slate-950 rounded-full font-bold hover:bg-slate-200 transition-all transform hover:scale-105 active:scale-95 shadow-xl">
+            {{ isLoggedIn ? 'Go to Dashboard' : 'Get Started' }}
+        </button>
+    </div>
+</nav>

@@ -1,0 +1,13 @@
+<div class="min-h-screen bg-slate-950 text-white font-sans">
+    <app-navbar-dashboard-section (logoutEvent)="logout()" (homeEvent)="goToHome()"
+        [username]="username"></app-navbar-dashboard-section>
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <app-form-link-dashboard-section (createLinkEvent)="createLink($event)"
+            [isCreating]="isCreating"></app-form-link-dashboard-section>
+        <app-stats-dashboard-section [totalLinks]="totalLinks" [totalClicks]="totalClicks"
+            [totalLinksActive]="totalLinksActive" [totalLinksExpired]="totalLinksExpired"></app-stats-dashboard-section>
+        <app-list-link-dashboard-section (confirmDeleteEvent)="confirmDelete($event)" [links]="links()"
+            [isLoadingLinks]="isLoadingLinks()"></app-list-link-dashboard-section>
+    </main>
+
+</div>

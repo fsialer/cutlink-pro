@@ -1,0 +1,46 @@
+<div
+    class="group bg-slate-900/50 hover:border-slate-700 p-4 md:p-6 rounded-2xl transition-all hover:bg-slate-900 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div class="flex-1 min-w-0">
+        <div class="flex items-center space-x-2 mb-1">
+            <h4 class="font-bold text-lg truncate text-indigo-400">{{ getShortUrl(link.short_code) }}
+            </h4>
+            <button (click)="copyToClipboard(link.short_code)"
+                class="p-1 text-slate-500 hover:text-white transition-colors bg-transparent border-none cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012-2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                </svg>
+            </button>
+        </div>
+        <p class="text-sm text-slate-500 truncate">{{ link.long_url }}</p>
+    </div>
+
+    <div class="flex items-center space-x-6">
+        <div class="text-right">
+            <p class="text-sm font-bold">{{ link.clicks || 0 }}</p>
+            <p class="text-xs text-slate-500 uppercase tracking-wider">clicks</p>
+        </div>
+
+        <div>
+            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Created</p>
+            <p class="text-sm">{{ link.created_at | date:'MMM d, y' }}</p>
+        </div>
+
+        <div>
+            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Expires</p>
+            <p class="text-sm" [class.text-yellow-400]="isExpiringSoon(link.expires_at)"
+                [class.text-red-400]="isExpired(link.expires_at)">
+                {{ link.expires_at | date:'MMM d, y, h:mm a' }}
+            </p>
+        </div>
+        <button (click)="deleteLink(link.url_id)"
+            class="p-2 text-slate-500 hover:text-red-400 transition-colors bg-transparent border-none cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-white">
+    @if (!error()) {
+    <app-loading-redirect-section [code]="code"></app-loading-redirect-section>
+    }
+    @else {
+    <app-error-redirect-section (retryEvent)="retry()" [error]="error()"></app-error-redirect-section>
+    }
+</div>

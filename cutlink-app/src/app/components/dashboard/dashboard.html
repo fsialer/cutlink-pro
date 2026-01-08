@@ -1,0 +1,205 @@
+<div class="min-h-screen bg-slate-950 text-white font-sans">
+    <!-- Dashboard Nav -->
+    <nav class="flex items-center justify-between px-8 py-4 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="flex items-center space-x-3 cursor-pointer" (click)="goToHome()">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+            </div>
+            <span class="text-lg font-bold">CutLink</span>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <div class="hidden md:block text-right">
+                <p class="text-sm font-medium text-slate-200">{{ username }}</p>
+                <p class="text-xs text-slate-500">Premium Member</p>
+            </div>
+            <button (click)="logout()"
+                class="p-2 text-slate-400 hover:text-white transition-colors border-none bg-transparent cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <!-- Create Link Section -->
+        <section class="mb-16">
+            <div
+                class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-8 md:p-12 shadow-2xl shadow-indigo-600/20 relative overflow-hidden">
+
+
+                <div class="relative">
+                    <h2 class="text-3xl font-bold mb-2">Shorten a new link</h2>
+                    <p class="text-indigo-100 mb-8 max-w-lg">Paste your long URL below and get a clean, short link ready
+                        to share.</p>
+
+                    <form [formGroup]="createlinkForm" (ngSubmit)="createLink()" class="space-y-4">
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <input type="url" formControlName="url" placeholder="https://very-long-url.com/some/path"
+                                class="flex-1 px-6 py-4 bg-white/10 rounded-2xl text-white placeholder-indigo-200 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all backdrop-blur-sm"
+                                required>
+                            <button type="submit" [disabled]="isCreating || createlinkForm.invalid"
+                                class="px-8 py-4 bg-white text-indigo-600 border-none rounded-2xl font-bold hover:bg-slate-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-900/40 cursor-pointer">
+                                <span *ngIf="!isCreating">Shorten Now</span>
+                                <span *ngIf="isCreating" class="flex items-center space-x-2">
+                                    <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>
+                                    <span>Processing...</span>
+                                </span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 max-w-xs">
+                                <label
+                                    class="text-xs text-indigo-200 uppercase tracking-widest font-bold mb-2 block">Expiration
+                                    Time</label>
+                                <select formControlName="expiration"
+                                    class="w-full px-4 py-2 bg-white/10 border-none rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-white/50 transition-all cursor-pointer appearance-none">
+                                    <option value="0" class="bg-slate-900">Never expires</option>
+                                    <option value="1" class="bg-slate-900">1 Hour</option>
+                                    <option value="24" class="bg-slate-900">1 Day</option>
+                                    <option value="168" class="bg-slate-900">7 Days</option>
+                                    <option value="720" class="bg-slate-900">30 Days</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl">
+                <p class="text-slate-500 text-sm mb-1 uppercase tracking-wider">Total Links</p>
+                <p class="text-3xl font-bold">{{ links.length }}</p>
+            </div>
+            <div class="bg-slate-900/50 p-6 rounded-2xl">
+                <p class="text-slate-500 text-sm mb-1 uppercase tracking-wider">Total Clicks</p>
+                <p class="text-3xl font-bold text-indigo-400">{{ totalClicks }}</p>
+            </div>
+            <div class="bg-slate-900/50 p-6 rounded-2xl">
+                <p class="text-slate-500 text-sm mb-1 uppercase tracking-wider">Active Links</p>
+                <p class="text-3xl font-bold text-emerald-400">{{ totalLinksActive }}</p>
+            </div>
+        </div>
+
+        <!-- Links List -->
+        <section>
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold">Your Recent Links</h3>
+                <button
+                    class="text-indigo-400 hover:text-indigo-300 text-sm font-medium bg-transparent border-none cursor-pointer">Export
+                    CSV</button>
+            </div>
+
+            <div *ngIf="links.length === 0 && !isLoadingLinks" class="text-center py-20 bg-slate-900/30 rounded-3xl">
+                <div
+                    class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <p class="text-slate-400 font-sans">No links created yet. Start by shortening one!</p>
+            </div>
+
+            <div class="space-y-4">
+                @for(link of links; track link.id) {
+                <div
+                    class="group bg-slate-900/50 hover:border-slate-700 p-4 md:p-6 rounded-2xl transition-all hover:bg-slate-900 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <h4 class="font-bold text-lg truncate text-indigo-400">{{ getShortUrl(link.short_code) }}
+                            </h4>
+                            <button (click)="copyToClipboard(link.short_code)"
+                                class="p-1 text-slate-500 hover:text-white transition-colors bg-transparent border-none cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012-2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-500 truncate">{{ link.long_url }}</p>
+                    </div>
+
+                    <div class="flex items-center space-x-6">
+                        <div class="text-right">
+                            <p class="text-sm font-bold">{{ link.clicks || 0 }}</p>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider">clicks</p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Created</p>
+                            <p class="text-sm">{{ link.created_at | date:'MMM d, y' }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Expires</p>
+                            <p class="text-sm" [class.text-yellow-400]="isExpiringSoon(link.expires_at)"
+                                [class.text-red-400]="isExpired(link.expires_at)">
+                                {{ link.expires_at | date:'MMM d, y, h:mm a' }}
+                            </p>
+                        </div>
+                        <button (click)="deleteLink(link.url_id)"
+                            class="p-2 text-slate-500 hover:text-red-400 transition-colors bg-transparent border-none cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                }
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div *ngIf="showDeleteModal"
+        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            class="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl shadow-indigo-500/10 animate-in zoom-in-95 duration-300">
+            <div class="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center text-red-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-bold mb-2">Delete Link?</h3>
+            <p class="text-slate-400 mb-8">This action cannot be undone. Are you sure you want to permanently delete
+                this link and its analytics data?</p>
+
+            <div class="flex flex-col gap-3">
+                <button (click)="confirmDelete()"
+                    class="w-full py-4 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-bold transition-all shadow-lg shadow-red-500/20 active:scale-[0.98]">
+                    Yes, Delete Link
+                </button>
+                <button (click)="cancelDelete()"
+                    class="w-full py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl font-bold transition-all active:scale-[0.98]">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
