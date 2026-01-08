@@ -16,6 +16,7 @@ El sistema abstrae la complejidad en microservicios dedicados, asegurando aislam
 | **URL Worker** | Node.js | Worker en segundo plano que procesa eventos de click desde RabbitMQ y actualiza la base de datos MySQL (Patrón Write-Behind). | N/A |
 | **Schedule Sanitation**| Node.js / Cron | Tarea programada que limpia URLs expiradas y realiza mantenimiento de base de datos. | N/A |
 | **Frontend** | Angular + Tailwind | Aplicación de página única (SPA) moderna para la interacción del usuario y dashboards. | `4200` |
+| **Keycloak** | Java / OpenJDK | Servidor de Gestión de Identidad y Acceso (IAM). Maneja usuarios, roles y tokens JWT. | `8080` |
 
 ### Infraestructura y Datos
 
@@ -25,7 +26,6 @@ El sistema abstrae la complejidad en microservicios dedicados, asegurando aislam
 - **RabbitMQ**: Broker de mensajería para desacoplar el procesamiento de clicks (Exchange Fanout: `clicks_fanout`).
 - **Keycloak**: Gestión de Identidad y Acceso de Código Abierto para autenticación.
 
----
 
 ## 🚀 Comenzando
 
