@@ -2,6 +2,15 @@
 
 El servicio backend principal de CutLink Pro. Gestiona el ciclo de vida de las URLs Cortas y maneja la lógica de redirección.
 
+## 💻 Tecnologías
+
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Base de Datos**: MySQL (mysql2)
+- **Caché**: Redis (ioredis/redis)
+- **Mensajería**: RabbitMQ (amqplib)
+- **ID Gen**: nanoid (IDs cortos únicos)
+
 ## 🧠 Lógica Central
 
 ### 1. Creación de URL
