@@ -2,6 +2,13 @@
 
 Este microservicio proporciona actualizaciones en tiempo real al frontend usando WebSockets. Actúa como un puente entre el bus de eventos (RabbitMQ) y la interfaz del cliente.
 
+## 💻 Tecnologías
+
+- **Runtime**: Node.js
+- **Protocolo**: WebSockets (Socket.io)
+- **Mensajería**: RabbitMQ (amqplib)
+- **CORS**: Configurado para permitir conexión del origen frontend.
+
 ## 📡 Cómo Funciona
 
 1.  **Consume**: Escucha el exchange `clicks_fanout` en RabbitMQ esperando eventos de click.
