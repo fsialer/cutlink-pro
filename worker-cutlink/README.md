@@ -2,6 +2,13 @@
 
 Este es un servicio worker en segundo plano responsable del patrón **Write-Behind** en la arquitectura de conteo de clicks.
 
+## 💻 Tecnologías
+
+- **Runtime**: Node.js
+- **Mensajería**: RabbitMQ (amqplib)
+- **Base de Datos**: MySQL (mysql2)
+- **Patrón**: Write-Behind (Escritura diferida)
+
 ## ⚙️ Funcionalidad
 
 1.  **Consume**: Se suscribe al exchange `clicks_fanout` (cola: `clisksa`).
