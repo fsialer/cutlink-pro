@@ -2,6 +2,13 @@
 
 Un servicio de mantenimiento en segundo plano impulsado por `node-cron`. Mantiene la base de datos saludable eliminando registros expirados o inválidos periódicamente.
 
+## 💻 Tecnologías
+
+- **Runtime**: Node.js
+- **Scheduling**: node-cron (Formato estilo Unix)
+- **Base de Datos**: MySQL (mysql2)
+- **Logs**: Consola estándar (capturada por Docker).
+
 ## 🕰 Tareas
 
 - **Limpieza de URLs**: Elimina URLs cuya fecha `expires_at` está en el pasado.
