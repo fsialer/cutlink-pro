@@ -2,6 +2,14 @@
 
 El API Gateway es el punto de entrada central para el ecosistema de microservicios de CutLink Pro. Maneja el enrutamiento de peticiones, verificación de autenticación mediante proxies de Keycloak e inyección de headers de seguridad.
 
+## 💻 Tecnologías
+
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Proxy**: http-proxy-middleware
+- **Seguridad**: Helmet, CORS
+- **Auth**: express-oauth2-jwt-bearer (Validación JWT)
+
 ## 🔑 Características Clave
 
 - **Proxy Inverso**: Usa `http-proxy-middleware` para enrutar peticiones al `url-service` y al servicio `realtime`.
