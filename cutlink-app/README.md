@@ -17,6 +17,13 @@ La interfaz de usuario para CutLink Pro, construida con **Angular (v19)** y **Ta
   </tr>
 </table>
 
+## 💻 Tecnologías
+
+- **Framework**: Angular v19
+- **Estilos**: TailwindCSS
+- **Real-time**: Socket.io-client
+- **Auth**: Keycloak-js
+- **Seguridad**: DOMSanitizer
 
 ## 🌟 Características
 
