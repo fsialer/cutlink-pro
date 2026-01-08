@@ -1,0 +1,238 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=url_db
+      - MYSQL_USER=url_user
+      - MYSQL_PASSWORD=url_password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cutlink-net
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - cutlink-net
+    volumes:
+      - redis_data:/data
+  
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+      - POSTGRES_DB=keycloak
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cutlink-net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.0
+    container_name: keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=keycloak
+      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME_STRICT=false
+      - KC_HEALTH_ENABLED=true
+    command: start-dev
+    healthcheck:
+      test: ["CMD", "/bin/bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && echo -e 'GET /health/live HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && cat <&3 | grep -q 'HTTP/1.1 200 OK'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - cutlink-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  gateway:
+    build: ./api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      - AUTH_ISSUER=http://keycloak:8080/realms/cutlink_reaml
+      - URL_SERVICE_URL=http://url-service:3001
+      - INTERNAL_SECRET=secret
+      - PORT=4000
+      - REALTIME_URL=http://realtime:3005
+    networks:
+      - cutlink-net
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      url-service:
+        condition: service_started
+      realtime:
+        condition: service_healthy
+
+  url-service:
+    build: ./url-service
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - INTERNAL_SECRET=secret
+      - DB_HOST=mysql
+      - DB_USER=url_user
+      - DB_PASSWORD=url_password
+      - DB_NAME=url_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - RABBITMQ_URL=amqp://rabbitmq
+      - RABBITMQ_QUEUE=clicks
+      - RABBITMQ_EXCHANGE=clicks_fanout
+    networks:
+      - cutlink-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  url-worker:
+    build: ./worker-cutlink
+    command: node src/worker.js
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=url_user
+      - DB_PASSWORD=url_password
+      - DB_NAME=url_db
+      - RABBITMQ_URL=amqp://rabbitmq
+      - RABBITMQ_QUEUE=clicksa
+      - RABBITMQ_EXCHANGE=clicks_fanout
+    networks:
+      - cutlink-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "ps", "aux", "|", "grep", "node", "||", "exit", "1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  schedule-worker:
+    build: ./schedule-sanitation
+    command: node src/schedule.js
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=url_user
+      - DB_PASSWORD=url_password
+      - DB_NAME=url_db
+      - CRON_SCHEDULE=*/5 * * * *
+    networks:
+      - cutlink-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cutlink-net
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  
+  realtime:
+    build: ./realtime
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+      - INTERNAL_SECRET=secret
+      - RABBITMQ_URL=amqp://rabbitmq
+      - RABBITMQ_QUEUE=clicksb
+      - RABBITMQ_EXCHANGE=clicks_fanout
+      - EVENT_WEBSOCKET=click-update
+    networks:
+      - cutlink-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:3005/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  
+  frontend:
+    build: 
+      context: ./cutlink-app
+      dockerfile: Dockerfile
+    container_name: cutlink-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - cutlink-net
+    depends_on:
+      gateway:
+        condition: service_started
+      keycloak:
+        condition: service_healthy
+      url-service:
+        condition: service_started
+      url-worker:
+        condition: service_started
+      schedule-worker:
+        condition: service_started
+
+networks:
+  cutlink-net:
+    name: cutlink-net
+    driver: bridge
+
+volumes:
+  mysql_data:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
