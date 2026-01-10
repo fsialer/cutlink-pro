@@ -91,6 +91,7 @@ services:
       - INTERNAL_SECRET=secret
       - PORT=4000
       - REALTIME_URL=http://realtime:3005
+      - CORS_ORIGIN=http://localhost:4200
     networks:
       - cutlink-net
     depends_on:
