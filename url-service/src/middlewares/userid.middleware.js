@@ -1,6 +1,4 @@
-const config = require('../config')
-
-const obtainUserIdMiddleware = () => (req, res, next) => {
+const userIdMiddleware = (req, res, next) => {
     const userId = req.headers['x-user-id']
     if (!userId) {
         return res.status(401).json({ message: 'Unauthorized: Missing User ID' })
@@ -12,4 +10,4 @@ const obtainUserIdMiddleware = () => (req, res, next) => {
     next()
 }
 
-module.exports = obtainUserIdMiddleware
+module.exports = userIdMiddleware

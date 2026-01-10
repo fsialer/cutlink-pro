@@ -1,7 +1,7 @@
 const express = require('express')
 const config = require('./config')
 const urlRoute = require('./modules/urls/url.routes')
-const headerMiddleware = require('./middlewares/header.middleware')
+const secretMiddleware = require('./middlewares/secret.middleware')
 const helmet = require('helmet')
 const initDb = require('./scripts/urlTables')
 const port = config.port
@@ -15,7 +15,7 @@ app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
 
-app.use(headerMiddleware)
+app.use(secretMiddleware)
 app.use(urlRoute)
 
 
