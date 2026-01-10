@@ -2,6 +2,7 @@ const express = require('express')
 const config = require('./config')
 const urlRoute = require('./modules/urls/url.routes')
 const secretMiddleware = require('./middlewares/secret.middleware')
+const errorMiddleware = require('./middlewares/error.middleware')
 const helmet = require('helmet')
 const initDb = require('./scripts/urlTables')
 const port = config.port
@@ -17,6 +18,9 @@ app.get('/health', (req, res) => {
 
 app.use(secretMiddleware)
 app.use(urlRoute)
+
+// Global Error Handler
+app.use(errorMiddleware)
 
 
 initDb().then(() => {

@@ -24,10 +24,6 @@ async function getPublicUrl(shortCode) {
         throw new Error('URL has expired');
     }
 
-    // Increment click count (Fire and forget + Redis)
-    // Pass current DB clicks to initialize Redis if needed
-    // REMOVED: incrementClick is handled by the controller/redirection flow explicitly.
-
     return url;
 }
 
@@ -36,7 +32,24 @@ async function getAllUrls(userId) {
 }
 
 async function createUrl(url) {
-    const shortCode = nanoid(6);
+    let shortCode;
+    let isUnique = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 5;
+
+    while (!isUnique && attempts < MAX_ATTEMPTS) {
+        shortCode = nanoid(6);
+        const existingUrl = await urlRepository.obtainUrlByShortCode(shortCode);
+        if (!existingUrl) {
+            isUnique = true;
+        }
+        attempts++;
+    }
+
+    if (!isUnique) {
+        throw new Error('Failed to generate unique short code');
+    }
+
     url.short_code = shortCode;
 
     // Calculate expiration based on expiration_hours sent from client
@@ -58,7 +71,7 @@ async function createUrl(url) {
     if (result.insertId > 0) {
         return { 'short_code': url.short_code }
     } else {
-        return { 'message': 'URL not created' }
+        throw new Error('URL not created');
     }
 }
 
