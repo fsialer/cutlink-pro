@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormLink } from './form-link';
+import { FormLinkDashboardSection } from './form-link';
 
 describe('FormLink', () => {
-  let component: FormLink;
-  let fixture: ComponentFixture<FormLink>;
+  let component: FormLinkDashboardSection;
+  let fixture: ComponentFixture<FormLinkDashboardSection>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormLink]
+      imports: [FormLinkDashboardSection]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(FormLink);
+    fixture = TestBed.createComponent(FormLinkDashboardSection);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

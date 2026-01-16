@@ -14,9 +14,17 @@ export class FormLinkDashboardSection {
   @Input() isCreating: boolean = false;
 
   createlinkForm: FormGroup = this.fb.group({
-    url: ['', [Validators.required, Validators.pattern(/^(http|https):\/\/[^ "]+$/)]],
+    url: ['', [Validators.required, Validators.pattern(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/)]],
     expiration: ['0', [Validators.required]]
   });
+
+  expirationOptions = [
+    { value: '0', label: 'Never expires' },
+    { value: '1', label: '1 Hour' },
+    { value: '24', label: '1 Day' },
+    { value: '168', label: '7 Days' },
+    { value: '720', label: '30 Days' },
+  ];
 
   createLink() {
     if (this.createlinkForm.invalid) return;
