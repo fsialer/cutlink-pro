@@ -4,8 +4,6 @@ const catchAsync = require('../../utils/catchAsync')
 module.exports = {
     getAllUrls: catchAsync(getAllUrls),
     createUrl: catchAsync(createUrl),
-    getUrl: catchAsync(getUrl),
-    updateUrl: catchAsync(updateUrl),
     deleteUrl: catchAsync(deleteUrl),
     incrClick: catchAsync(incrClick),
     getPublicUrl: catchAsync(getPublicUrl)
@@ -24,24 +22,8 @@ async function createUrl(req, res) {
     if (result.short_code) {
         res.status(201).json(result)
     } else {
-        // This case might be better handled by throwing an error in service, but keeping logic similar for now
         res.status(400).json({ 'message': 'URL not created' })
     }
-}
-
-async function getUrl(req, res) {
-    const urlId = req.params.urlId
-    const owner_id = req.owner_id
-    const result = await urlService.getUrl(urlId, owner_id)
-    res.status(200).json(result)
-}
-
-async function updateUrl(req, res) {
-    const { urlId } = req.params
-    const url = req.body
-    const owner_id = req.owner_id
-    const result = await urlService.updateUrl(urlId, url, owner_id)
-    res.status(200).json(result)
 }
 
 async function deleteUrl(req, res) {
