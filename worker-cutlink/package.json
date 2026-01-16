@@ -2,6 +2,7 @@
   "name": "worker-cutlink",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "worker.js",
   "scripts": {
     "start": "node src/worker.js",

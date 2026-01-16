@@ -1,10 +1,8 @@
-const { updateClicks } = require('./click.repository')
+import { updateClicks } from './click.repository.js'
 
 async function processClick(clickData) {
     try {
-        console.log("clickData: ", clickData)
         const { short_code } = clickData;
-        console.log(`[Worker] Processing click for ID: ${short_code}`);
         const result = await updateClicks(short_code)
 
         if (result.affectedRows === 0) {
@@ -21,6 +19,6 @@ async function processClick(clickData) {
 
 
 
-module.exports = {
+export {
     processClick
 };

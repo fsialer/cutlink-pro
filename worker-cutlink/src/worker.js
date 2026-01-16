@@ -1,6 +1,7 @@
-const rabbitmq = require('./lib/rabbitmq');
-const { processClick } = require('./modules/clicks/click.consumer');
-const config = require('../src/config')
+import { processClick } from './modules/clicks/click.consumer.js'
+import rabbitmq from './lib/rabbitmq.js'
+import config from './config/index.js'
+
 
 const queueName = config.rabbitmqQueue || 'clicks'
 
@@ -9,7 +10,6 @@ async function startWorker() {
     try {
         // Connect to RabbitMQ
         await rabbitmq.connect();
-
         // Start Consumer
         await rabbitmq.consume(queueName, processClick);
 
