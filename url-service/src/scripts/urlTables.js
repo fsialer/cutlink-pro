@@ -12,10 +12,19 @@ CREATE TABLE IF NOT EXISTS urls (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`
 
+const indexShortCode = `CREATE INDEX idx_short_code ON urls(short_code)`
+
+const existsIndexShortCode = `SELECT COUNT(*) as count FROM information_schema.STATISTICS WHERE TABLE_NAME = 'urls' AND INDEX_NAME = 'idx_short_code' AND TABLE_SCHEMA = DATABASE()`
+
 async function initDb(retries = 10, delay = 3000) {
     for (let i = 0; i < retries; i++) {
         try {
             await pool.query(createUrlTable)
+            const [rows] = await pool.query(existsIndexShortCode)
+            if (rows[0].count === 0) {
+                await pool.query(indexShortCode)
+                console.log('Index idx_short_code created')
+            }
             console.log('Database tables initialized')
             return
         } catch (error) {
