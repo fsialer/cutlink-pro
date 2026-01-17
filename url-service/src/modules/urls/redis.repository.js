@@ -1,6 +1,6 @@
-const redisClient = require('../../lib/redis');
+import redisClient from '../../lib/redis.js';
 
-module.exports = {
+export default {
     increment,
     get,
     setNxEx,

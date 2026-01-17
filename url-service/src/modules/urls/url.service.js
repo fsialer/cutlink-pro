@@ -1,10 +1,10 @@
-const urlRepository = require('./url.repository')
-const redisRepository = require('./redis.repository')
-const clickProducer = require('../urls/click.producer')
-const { nanoid } = require('nanoid');
-const helper = require('../../helpers/helper');
+import urlRepository from './url.repository.js'
+import redisRepository from './redis.repository.js'
+import clickProducer from '../urls/click.producer.js'
+import { nanoid } from 'nanoid';
+import helper from '../../helpers/helper.js';
 
-module.exports = {
+export default {
     getAllUrls,
     createUrl,
     deleteUrl,

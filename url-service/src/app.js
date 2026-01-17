@@ -1,10 +1,10 @@
-const express = require('express')
-const config = require('./config')
-const urlRoute = require('./modules/urls/url.routes')
-const secretMiddleware = require('./middlewares/secret.middleware')
-const errorMiddleware = require('./middlewares/error.middleware')
-const helmet = require('helmet')
-const initDb = require('./scripts/urlTables')
+import express from 'express'
+import config from './config/index.js'
+import urlRoute from './modules/urls/url.routes.js'
+import secretMiddleware from './middlewares/secret.middleware.js'
+import errorMiddleware from './middlewares/error.middleware.js'
+import helmet from 'helmet'
+import initDb from './scripts/urlTables.js'
 const port = config.port
 
 const app = express()

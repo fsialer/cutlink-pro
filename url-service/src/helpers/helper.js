@@ -1,6 +1,6 @@
-const { nanoid } = require('nanoid');
-const urlRepository = require('../modules/urls/url.repository');
-const redisRepository = require('../modules/urls/redis.repository');
+import { nanoid } from 'nanoid';
+import urlRepository from '../modules/urls/url.repository.js';
+import redisRepository from '../modules/urls/redis.repository.js';
 
 
 const getValidUrl = async (url) => {
@@ -48,9 +48,9 @@ const enrichWithRealtimeStats = async (url) => {
     }
 }
 
-module.exports = {
-    getValidUrl,
+export default {
     generateUniqueShortCode,
     calculateExpiration,
+    getValidUrl,
     enrichWithRealtimeStats
 }

@@ -1,4 +1,6 @@
-const rabbitmq = require('../../lib/rabbitmq');
+import amqp from 'amqplib';
+import config from '../../config/index.js';
+import rabbitmq from '../../lib/rabbitmq.js';
 
 async function sendClick(clickData) {
     try {
@@ -8,6 +10,4 @@ async function sendClick(clickData) {
     }
 }
 
-module.exports = {
-    sendClick
-};
+export default { sendClick };

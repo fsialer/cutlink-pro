@@ -1,21 +1,13 @@
-const urlService = require('./url.service')
-const catchAsync = require('../../utils/catchAsync')
+import urlService from './url.service.js'
+import catchAsync from '../../utils/catchAsync.js'
 
-module.exports = {
-    getAllUrls: catchAsync(getAllUrls),
-    createUrl: catchAsync(createUrl),
-    deleteUrl: catchAsync(deleteUrl),
-    incrClick: catchAsync(incrClick),
-    getPublicUrl: catchAsync(getPublicUrl)
-}
-
-async function getAllUrls(req, res) {
+export const getAllUrls = catchAsync(async (req, res) => {
     const owner_id = req.owner_id
     const result = await urlService.getAllUrls(owner_id);
     res.status(200).json(result);
-}
+});
 
-async function createUrl(req, res) {
+export const createUrl = catchAsync(async (req, res) => {
     const url = req.body
     url.owner_id = req.owner_id
     const result = await urlService.createUrl(url)
@@ -24,25 +16,25 @@ async function createUrl(req, res) {
     } else {
         res.status(400).json({ 'message': 'URL not created' })
     }
-}
+});
 
-async function deleteUrl(req, res) {
+export const deleteUrl = catchAsync(async (req, res) => {
     const { url_id } = req.params
     const owner_id = req.owner_id
     await urlService.deleteUrl(url_id, owner_id)
     res.status(204).end()
-}
+});
 
-async function incrClick(req, res) {
+export const incrClick = catchAsync(async (req, res) => {
     const { short_code } = req.params
     const result = await urlService.getPublicUrl(short_code)
     const { owner_id, clicks } = result
     urlService.incrementClick(short_code, owner_id, clicks)
     res.status(204).end()
-}
+});
 
-async function getPublicUrl(req, res) {
+export const getPublicUrl = catchAsync(async (req, res) => {
     const { short_code } = req.params
     const result = await urlService.getPublicUrl(short_code)
     res.status(200).json(result)
-}
+});

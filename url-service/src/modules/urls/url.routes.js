@@ -1,10 +1,10 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router();
-const { getAllUrls, createUrl, getUrl, deleteUrl, incrClick, getPublicUrl } = require('./url.controller')
-const userIdMiddleware = require('../../middlewares/userid.middleware')
-const validation = require('../../middlewares/createvalidation.middleware');
+import { getAllUrls, createUrl, deleteUrl, incrClick, getPublicUrl } from './url.controller.js'
+import userIdMiddleware from '../../middlewares/userid.middleware.js'
+import validation from '../../middlewares/createvalidation.middleware.js';
 
-const { createUrlSchema, urlISchema } = require('../../schemas/urlSchema');
+import { createUrlSchema, urlISchema } from '../../schemas/urlSchema.js';
 
 
 router.get('/public/:short_code', getPublicUrl)
@@ -13,4 +13,4 @@ router.get('/', userIdMiddleware, getAllUrls)
 router.post('/', userIdMiddleware, validation({ body: createUrlSchema }), createUrl)
 router.delete('/:url_id', userIdMiddleware, validation({ params: urlISchema }), deleteUrl)
 
-module.exports = router
+export default router

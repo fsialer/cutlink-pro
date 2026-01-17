@@ -1,4 +1,4 @@
-const pool = require('../lib/connect')
+import pool from '../lib/connect.js'
 
 const createUrlTable = `
 CREATE TABLE IF NOT EXISTS urls (
@@ -29,4 +29,4 @@ async function initDb(retries = 10, delay = 3000) {
     }
 }
 
-module.exports = initDb
+export default initDb

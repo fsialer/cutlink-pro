@@ -1,4 +1,4 @@
-const boom = require('@hapi/boom');
+import boom from '@hapi/boom';
 
 function errorHandler(err, req, res, next) {
     let error = err;
@@ -20,4 +20,4 @@ function errorHandler(err, req, res, next) {
     res.status(output.statusCode).json(output.payload);
 }
 
-module.exports = errorHandler;
+export default errorHandler;

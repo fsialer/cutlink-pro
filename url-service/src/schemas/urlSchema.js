@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+import joi from '@hapi/joi'
 const idSchema = joi.number()
 
 const urlUrlSchema = joi.string().uri({ scheme: ["http", "https"] })
@@ -20,7 +20,7 @@ const updateeUrlSchema = {
     expiration_hours: joi.number().default(0)
 }
 
-module.exports = {
+export {
     urlISchema,
     createUrlSchema,
     updateeUrlSchema

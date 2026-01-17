@@ -1,41 +1,51 @@
-const urlService = require('./url.service')
-const repository = require('./url.repository')
-const redisRepository = require('./redis.repository')
-const producer = require('./click.producer')
-const helper = require('../../helpers/helper');
+import { jest } from '@jest/globals';
 
-jest.mock('./url.repository', () => ({
-    createUrl: jest.fn(),
-    getUrls: jest.fn(),
-    getUrl: jest.fn(),
-    updateUrl: jest.fn(),
-    deleteUrl: jest.fn(),
-    obtainUserIdByUrlId: jest.fn(),
-    obtainUrlByShortCode: jest.fn(),
+jest.unstable_mockModule('./url.repository.js', () => ({
+    default: {
+        createUrl: jest.fn(),
+        getUrls: jest.fn(),
+        getUrl: jest.fn(),
+        updateUrl: jest.fn(),
+        deleteUrl: jest.fn(),
+        obtainUserIdByUrlId: jest.fn(),
+        obtainUrlByShortCode: jest.fn(),
+    }
 }));
 
-jest.mock('nanoid', () => ({
+jest.unstable_mockModule('nanoid', () => ({
     nanoid: jest.fn(() => 'e43nn34')
 }));
 
 
-jest.mock('./redis.repository', () => ({
-    increment: jest.fn(),
-    get: jest.fn(),
-    setNxEx: jest.fn(),
-    expire: jest.fn()
+jest.unstable_mockModule('./redis.repository.js', () => ({
+    default: {
+        increment: jest.fn(),
+        get: jest.fn(),
+        setNxEx: jest.fn(),
+        expire: jest.fn()
+    }
 }));
 
-jest.mock('./click.producer', () => ({
-    sendClick: jest.fn()
+jest.unstable_mockModule('./click.producer.js', () => ({
+    default: {
+        sendClick: jest.fn()
+    }
 }));
 
-jest.mock('../../helpers/helper', () => ({
-    getValidUrl: jest.fn(),
-    generateUniqueShortCode: jest.fn(),
-    calculateExpiration: jest.fn(),
-    enrichWithRealtimeStats: jest.fn()
+jest.unstable_mockModule('../../helpers/helper.js', () => ({
+    default: {
+        getValidUrl: jest.fn(),
+        generateUniqueShortCode: jest.fn(),
+        calculateExpiration: jest.fn(),
+        enrichWithRealtimeStats: jest.fn()
+    }
 }));
+
+const { default: urlService } = await import('./url.service.js');
+const { default: repository } = await import('./url.repository.js');
+const { default: redisRepository } = await import('./redis.repository.js');
+const { default: producer } = await import('./click.producer.js');
+const { default: helper } = await import('../../helpers/helper.js');
 
 
 

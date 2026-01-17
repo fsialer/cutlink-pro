@@ -1,5 +1,5 @@
-const amqp = require('amqplib');
-const config = require('../config')
+import amqp from 'amqplib';
+import config from '../config/index.js'
 const exchange = config.rabbitmqExchange || 'clicks_fanout';
 
 let connection = null;
@@ -58,7 +58,7 @@ async function publish(message) {
     }
 }
 
-module.exports = {
+export default {
     connect,
     getChannel,
     publish

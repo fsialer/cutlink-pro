@@ -1,5 +1,5 @@
-const boom = require('@hapi/boom')
-const validate = require('../utils/validate')
+import boom from '@hapi/boom'
+import validate from '../utils/validate.js'
 
 function createValidationMiddleware(validationSchema) {
     return function validationMiddleware(req, res, next) {
@@ -15,5 +15,5 @@ function createValidationMiddleware(validationSchema) {
     }
 }
 
-module.exports = createValidationMiddleware
+export default createValidationMiddleware
 

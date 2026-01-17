@@ -10,4 +10,4 @@ const userIdMiddleware = (req, res, next) => {
     next()
 }
 
-module.exports = userIdMiddleware
+export default userIdMiddleware

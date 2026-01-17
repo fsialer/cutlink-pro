@@ -25,3 +25,4 @@
 
 # --- Docker ---
 **/docker-compose.override.yml
+**/*.txt

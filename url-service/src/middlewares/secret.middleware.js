@@ -1,4 +1,4 @@
-const config = require('../config')
+import config from '../config/index.js'
 const verifyGatewayRequest = (req, res, next) => {
     const secret = req.headers['x-internal-secret'];
     if (secret !== config.internalSecret) {
@@ -7,4 +7,4 @@ const verifyGatewayRequest = (req, res, next) => {
     next();
 };
 
-module.exports = verifyGatewayRequest
+export default verifyGatewayRequest
