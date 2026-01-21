@@ -1,5 +1,5 @@
-const config = require('../config')
-const mysql = require('mysql2/promise')
+import config from '../config/index.js';
+import mysql from 'mysql2/promise';
 
 const pool = mysql.createPool({
     host: config.dbHost,
@@ -12,4 +12,4 @@ const pool = mysql.createPool({
 })
 
 
-module.exports = pool
+export default pool

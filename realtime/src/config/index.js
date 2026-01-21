@@ -1,4 +1,4 @@
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config()
 
 const config = {
@@ -10,4 +10,4 @@ const config = {
     rabbitmqExchange: process.env.RABBITMQ_EXCHANGE
 }
 
-module.exports = config
+export default config

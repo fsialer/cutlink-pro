@@ -1,8 +1,8 @@
-const express = require('express')
-const { Server } = require("socket.io");
-const http = require('http');
-const rabbitmq = require('./lib/rabbitmq');
-const config = require('../src/config')
+import express from 'express'
+import { Server } from "socket.io";
+import http from 'http';
+import rabbitmq from './lib/rabbitmq.js';
+import config from '../src/config/index.js'
 
 const app = express()
 
@@ -42,7 +42,6 @@ const processClickWithIO = (ioInstance) => {
 // 3. Arrancamos RabbitMQ y pasamos nuestra función procesadora
 async function start() {
     await rabbitmq.connect();
-
     // Aquí está el secreto: Inyectamos 'io' en la lógica de procesamiento
     await rabbitmq.consume(config.rabbitmqQueue, processClickWithIO(io));
 
