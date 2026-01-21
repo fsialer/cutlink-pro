@@ -1,6 +1,6 @@
-const cron = require('node-cron')
-const config = require('../../config')
-const scheduleService = require('./schedule.service')
+import cron from 'node-cron'
+import config from '../../config.js'
+import scheduleService from './schedule.service.js'
 
 function startSchedule() {
     console.log('Initializing schedule tasks...')
@@ -48,4 +48,4 @@ function startSchedule() {
     sanitationTask()
 }
 
-module.exports = startSchedule
+export default startSchedule

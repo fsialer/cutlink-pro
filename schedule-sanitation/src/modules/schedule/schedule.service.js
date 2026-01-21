@@ -1,6 +1,6 @@
-const scheduleRepository = require("./schedule.repository");
+import scheduleRepository from "./schedule.repository.js";
 
-module.exports = {
+export default {
     deleteUrl
 }
 

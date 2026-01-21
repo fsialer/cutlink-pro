@@ -1,6 +1,6 @@
-const pool = require("../../lib/connect");
+import pool from "../../lib/connect.js";
 
-module.exports = {
+export default {
     deleteUrl
 }
 

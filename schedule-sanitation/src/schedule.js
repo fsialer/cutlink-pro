@@ -1,4 +1,4 @@
-const startSchedule = require('./modules/schedule/schedule.consumer');
+import startSchedule from './modules/schedule/schedule.consumer.js';
 
 console.log('Starting schedule worker...');
 
@@ -11,7 +11,6 @@ try {
     process.exit(1);
 }
 
-// Keep the process running
 process.on('SIGTERM', () => {
     console.log('SIGTERM received, shutting down gracefully...');
     process.exit(0);
