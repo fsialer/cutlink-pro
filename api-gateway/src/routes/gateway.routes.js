@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { wsProxy, agPublicProxy, agPrivateProxy } from '../middlewares/proxy.middleware.js';
+import checkJwt from '../middlewares/auth.middleware.js';
+import limiter from '../middlewares/ratelimit.middleware.js';
+
 const router = express.Router();
-const { wsProxy, agPublicProxy, agPrivateProxy } = require('../middlewares/proxy.middleware');
-const checkJwt = require('../middlewares/auth.middleware');
-const limiter = require('../middlewares/ratelimit.middleware');
 
 // Apply rate limiter to all routes (or specific ones if preferred)
 router.use(limiter);
@@ -18,4 +19,4 @@ router.use(agPublicProxy);
 // --- PRIVATE ROUTES (Auth Required) ---
 router.use('/v1/urls', checkJwt, agPrivateProxy);
 
-module.exports = router;
+export default router;

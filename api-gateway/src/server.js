@@ -1,10 +1,10 @@
-const express = require('express')
-const config = require('./config')
-const helmet = require('helmet')
-const errorHandler = require('./middlewares/error.handler')
-const cors = require('cors')
-const { wsProxy } = require('./middlewares/proxy.middleware')
-const gatewayRoutes = require('./routes/gateway.routes')
+import express from 'express'
+import config from './config/index.js'
+import helmet from 'helmet'
+import errorHandler from './middlewares/error.handler.js'
+import cors from 'cors'
+import { wsProxy } from './middlewares/proxy.middleware.js'
+import gatewayRoutes from './routes/gateway.routes.js'
 
 const app = express()
 

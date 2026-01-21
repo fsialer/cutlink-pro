@@ -1,5 +1,5 @@
-const { createProxyMiddleware } = require('http-proxy-middleware')
-const config = require('../config')
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import config from '../config/index.js'
 
 const wsProxy = createProxyMiddleware({
     target: config.realtimeUrl,
@@ -73,7 +73,7 @@ const agPrivateProxy = createProxyMiddleware({
     }
 });
 
-module.exports = {
+export {
     wsProxy,
     agPublicProxy,
     agPrivateProxy

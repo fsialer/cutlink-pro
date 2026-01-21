@@ -86,7 +86,8 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - AUTH_ISSUER=http://keycloak:8080/realms/cutlink_reaml
+      - JWKS_URI=http://keycloak:8080/realms/cutlink_reaml/protocol/openid-connect/certs
+      - AUTH_ISSUER=http://localhost:8080/realms/cutlink_reaml
       - URL_SERVICE_URL=http://url-service:3001
       - INTERNAL_SECRET=secret
       - PORT=4000

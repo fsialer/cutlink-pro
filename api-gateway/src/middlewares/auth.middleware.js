@@ -1,12 +1,12 @@
 // 1. Verificion OIDC 
-const { auth } = require('express-oauth2-jwt-bearer')
-const config = require('../config')
+import { auth } from 'express-oauth2-jwt-bearer'
+import config from '../config/index.js'
 
 const checkJwt = auth({
     audience: 'account',
-    jwksUri: `${config.authIssuer}/protocol/openid-connect/certs`, // Fetch keys from Internal Docker Network
-    issuer: 'http://localhost:8080/realms/cutlink_reaml', // Validate against External Host URL
+    jwksUri: config.jwksUri, // Fetch keys from Internal Docker Network
+    issuer: config.authIssuer, // Validate against External Host URL
     clockTolerance: 30
 })
 
-module.exports = checkJwt
+export default checkJwt
