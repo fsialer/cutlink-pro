@@ -1,5 +1,5 @@
 import cron from 'node-cron'
-import config from '../../config.js'
+import config from '../../config/index.js'
 import scheduleService from './schedule.service.js'
 
 function startSchedule() {
