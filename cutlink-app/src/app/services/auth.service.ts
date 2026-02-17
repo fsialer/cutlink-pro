@@ -1,13 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 import KeyCloak from 'keycloak-js'
+import { environment } from '../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     private keycloak = new KeyCloak({
-        url: 'http://localhost:8080',
-        realm: 'cutlink_reaml',
-        clientId: 'cutlink-app'
+        url: environment.keycloak.url,
+        realm: environment.keycloak.realm,
+        clientId: environment.keycloak.clientId
     });
 
     public profile = signal<any>({});
