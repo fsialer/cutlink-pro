@@ -214,6 +214,11 @@ services:
     container_name: cutlink-frontend
     ports:
       - "4200:80"
+    environment:
+      - KC_URL=http://localhost:8080
+      - KC_REALM=cutlink_reaml
+      - KC_CLIENT_ID=cutlink-app
+      - API_URL=http://localhost:4000/v1/urls
     networks:
       - cutlink-net
     depends_on:
